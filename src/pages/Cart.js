@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
 import MainNavigation from '../components/MainNavigation';
-import { removeProductFromCart } from '../store/actions';
+import { removeProductFromCart, addProductToCart } from '../store/actions';
+
 import './Cart.css';
 
 class CartPage extends Component {
@@ -26,7 +27,15 @@ class CartPage extends Component {
                       cartItem.id
                     )}
                   >
-                    Remove from Cart
+                  Remove from Cart
+                  </button>
+                  <button
+                    onClick={this.props.addProductToCart.bind(
+                      this,
+                      this.props.products.find( product => product.id === cartItem.id )
+                      )}
+                  >
+                   Add More Quantity
                   </button>
                 </div>
               </li>
@@ -40,6 +49,7 @@ class CartPage extends Component {
 
 const mapStateToProps = state => {
   return {
+    products: state.products,
     cartItems: state.cart,
     cartItemCount: state.cart.reduce((count, curItem) => {
       return count + curItem.quantity;
@@ -49,7 +59,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    removeProductFromCart: id => dispatch(removeProductFromCart(id))
+    removeProductFromCart: id => dispatch(removeProductFromCart(id)),
+    addProductToCart: product => dispatch(addProductToCart(product))
   };
 };
 
